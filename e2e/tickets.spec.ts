@@ -1,0 +1,38 @@
+import { expect, test } from "@playwright/test";
+
+test("lists only the current customer's tickets, newest first", async ({ page }) => {
+  await page.goto("/tickets");
+  const rows = page.getByRole("table").getByRole("row");
+
+  await expect(rows.nth(1)).toContainText("Invoice shows the wrong VAT rate");
+  await expect(rows.nth(2)).toContainText("Change delivery address");
+  await expect(page.getByText("Another customer's ticket")).toHaveCount(0);
+});
+
+test("shows a validation error and keeps the input when the subject is too short", async ({ page }) => {
+  await page.goto("/tickets/new");
+  await page.getByLabel("Subject").fill("Hi");
+  await page.getByLabel("Description").fill("Something is wrong.");
+  await page.getByRole("button", { name: "Submit ticket" }).click();
+
+  await expect(page.getByText("Subject must be at least 3 characters.")).toBeVisible();
+  await expect(page).toHaveURL("/tickets/new");
+  await expect(page.getByLabel("Description")).toHaveValue("Something is wrong.");
+});
+
+test("submitting a valid ticket shows it at the top of the list", async ({ page }) => {
+  const subject = `Package arrived damaged ${Date.now()}`;
+
+  await page.goto("/tickets");
+  await page.getByRole("link", { name: "New ticket" }).click();
+  await page.getByLabel("Subject").fill(subject);
+  await page.getByLabel("Description").fill("The box was crushed and two items are broken.");
+  await page.getByLabel("Priority").selectOption("high");
+  await page.getByRole("button", { name: "Submit ticket" }).click();
+
+  await expect(page).toHaveURL("/tickets");
+  const firstRow = page.getByRole("table").getByRole("row").nth(1);
+  await expect(firstRow).toContainText(subject);
+  await expect(firstRow).toContainText("Open");
+  await expect(firstRow).toContainText("High");
+});
