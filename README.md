@@ -6,7 +6,9 @@ Kundserviceportalen is a customer service portal where customers submit support 
 
 - [Project brief](docs/project-brief.md): overview, workflows, tech stack, MVP scope
 - [Team](docs/team.md): members, working agreement, ownership
-- [Week 5 status](docs/status/week-5.md): planned, completed, verified, uncertain, next steps
+- [Status updates](docs/status/): weekly status (planned, completed, verified, uncertain, next steps)
+- [Decisions](docs/decisions/README.md): architecture and project decisions (placeholder)
+- [AI usage](docs/ai/README.md): AI governance and task log (placeholder)
 
 ## Quickstart
 
