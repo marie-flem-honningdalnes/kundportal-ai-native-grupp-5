@@ -1,5 +1,27 @@
 # Kundserviceportalen
 
+Kundserviceportalen is a customer service portal where customers submit support tickets and view their previously submitted tickets with status updates. It is a local-first app built with Next.js 16, TypeScript, Tailwind CSS, SQLite (libSQL) and Drizzle ORM, using fake customer data only.
+
+## Documentation
+
+- [Project brief](docs/project-brief.md): overview, workflows, tech stack, MVP scope
+- [Team](docs/team.md): members, working agreement, ownership
+- [Week 5 status](docs/status/week-5.md): planned, completed, verified, uncertain, next steps
+
+## Quickstart
+
+The boilerplate is still being set up, so the scripts below are the intended ones and may not exist yet.
+
+```bash
+npm install
+npm run db:push   # sync the Drizzle schema to the local SQLite file
+npm run dev       # start the dev server at http://localhost:3000
+```
+
+---
+
+## Om kursrepot
+
 Här samlar ni teamets arbete med Kundserviceportalen i kursen AI Native Development. Ni väljer teknik och bygger en mindre fullstacklösning med AI-stöd. Använd bara påhittade kunduppgifter.
 
 **Uppgift, betygskriterier, veckoförväntningar och deadline finns under Kursexamination i Disco.** Börja där och återvänd dit under arbetet.
