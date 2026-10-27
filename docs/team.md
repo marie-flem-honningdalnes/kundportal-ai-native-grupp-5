@@ -17,7 +17,7 @@ We share responsibility for the Customer Service Portal (Kundserviceportalen) ac
 - **Weekly status.** We update `docs/status/week-N.md` each week with what was planned, completed, verified, uncertain, and next.
 - **AI use.** AI agents may draft code, tests, and docs, but a human owns and reviews every change. We record which tasks involved an AI agent and what was verified by hand.
 - **Fake data only.** No real customer data in the repo, in seeds, or in prompts.
-- **Communication.** Blockers are raised early. Decisions that affect the architecture are written down in `docs/project-brief.md`.
+- **Communication.** Blockers are raised early. Decisions that affect the architecture are written down in a new md-file for each descision `docs/decisions/` Decisions should follow structure in `docs/decisions/README.md` .
 
 ## Component ownership and AI-agent task tracking
 
