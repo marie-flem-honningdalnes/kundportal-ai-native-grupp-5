@@ -25,7 +25,7 @@ export function TicketList({ tickets }: { tickets: Ticket[] }) {
   if (tickets.length === 0) {
     return (
       <p className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-600">
-        You haven&apos;t submitted any tickets yet.
+        No tickets yet.
       </p>
     );
   }
@@ -36,15 +36,17 @@ export function TicketList({ tickets }: { tickets: Ticket[] }) {
         <thead className="bg-slate-50 text-slate-600">
           <tr>
             <th scope="col" className="px-4 py-3 font-medium">Subject</th>
+            <th scope="col" className="px-4 py-3 font-medium">Requester</th>
             <th scope="col" className="px-4 py-3 font-medium">Status</th>
             <th scope="col" className="px-4 py-3 font-medium">Priority</th>
-            <th scope="col" className="px-4 py-3 font-medium">Submitted</th>
+            <th scope="col" className="px-4 py-3 font-medium">Created</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200">
           {tickets.map((ticket) => (
             <tr key={ticket.id}>
               <td className="px-4 py-3 font-medium text-slate-900">{ticket.subject}</td>
+              <td className="px-4 py-3 text-slate-700">{ticket.requesterName}</td>
               <td className="px-4 py-3">
                 <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusStyles[ticket.status]}`}>
                   {statusLabels[ticket.status]}

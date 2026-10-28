@@ -2,12 +2,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Db } from "@/db/client";
 import { tickets } from "@/db/schema";
-import { createTestDb, insertCustomer } from "@/test-utils/testDb";
+import { createTestDb } from "@/test-utils/testDb";
 import { submitTicket } from "./actions";
 
 const mocks = vi.hoisted(() => ({
   db: undefined as unknown,
-  customerId: 0,
   revalidatePath: vi.fn(),
   redirect: vi.fn((url: string) => {
     throw new Error(`NEXT_REDIRECT:${url}`);
@@ -20,7 +19,6 @@ vi.mock("@/db/client", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/db/client")>()),
   getDb: () => mocks.db,
 }));
-vi.mock("@/lib/currentCustomer", () => ({ getCurrentCustomerId: async () => mocks.customerId }));
 
 function formData(fields: Record<string, string>) {
   const data = new FormData();
@@ -34,40 +32,72 @@ beforeEach(async () => {
   vi.clearAllMocks();
   db = await createTestDb();
   mocks.db = db;
-  mocks.customerId = (await insertCustomer(db)).id;
 });
 
 describe("submitTicket", () => {
   it("returns field errors and the submitted values when input is invalid, and saves nothing", async () => {
-    const state = await submitTicket(undefined, formData({ subject: "", description: "Help", priority: "low" }));
+    const state = await submitTicket(undefined, formData({ requesterName: "Ada", subject: "", description: "Help", priority: "low" }));
 
     expect(state?.errors?.subject).toBeDefined();
-    expect(state?.values).toEqual({ subject: "", description: "Help", priority: "low" });
+    expect(state?.values).toEqual({
+      requesterName: "Ada",
+      requesterEmail: "",
+      subject: "",
+      description: "Help",
+      priority: "low",
+    });
     expect(await db.select().from(tickets)).toHaveLength(0);
     expect(mocks.redirect).not.toHaveBeenCalled();
   });
 
-  it("saves a valid ticket for the current customer, revalidates the list and redirects to it", async () => {
+  it("saves a valid ticket with its requester, revalidates the list and redirects to it", async () => {
     await expect(
-      submitTicket(undefined, formData({ subject: "Broken invoice", description: "Totals are wrong", priority: "high" })),
+      submitTicket(undefined, formData({
+        requesterName: "Ada Lovelace",
+        requesterEmail: "ada@example.com",
+        subject: "Broken invoice",
+        description: "Totals are wrong",
+        priority: "high",
+      })),
     ).rejects.toThrow("NEXT_REDIRECT:/tickets");
 
     const saved = await db.select().from(tickets);
     expect(saved).toHaveLength(1);
-    expect(saved[0]).toMatchObject({ customerId: mocks.customerId, subject: "Broken invoice", priority: "high", status: "open" });
+    expect(saved[0]).toMatchObject({
+      requesterName: "Ada Lovelace",
+      requesterEmail: "ada@example.com",
+      subject: "Broken invoice",
+      priority: "high",
+      status: "open",
+    });
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/tickets");
   });
 
-  it("ignores a customerId or status sent in the form", async () => {
-    const other = await insertCustomer(db);
+  it("returns an error for an invalid requester email and saves nothing", async () => {
+    const state = await submitTicket(
+      undefined,
+      formData({ requesterName: "Ada", requesterEmail: "not-an-email", subject: "Hello", description: "Body" }),
+    );
+
+    expect(state?.errors?.requesterEmail).toBeDefined();
+    expect(await db.select().from(tickets)).toHaveLength(0);
+  });
+
+  it("saves a ticket without a requester email", async () => {
     await expect(
-      submitTicket(
-        undefined,
-        formData({ subject: "Spoof", description: "x", customerId: String(other.id), status: "closed" }),
-      ),
+      submitTicket(undefined, formData({ requesterName: "Grace", subject: "Phone call", description: "Invoice query" })),
     ).rejects.toThrow("NEXT_REDIRECT");
 
     const [saved] = await db.select().from(tickets);
-    expect(saved).toMatchObject({ customerId: mocks.customerId, status: "open" });
+    expect(saved).toMatchObject({ requesterName: "Grace", requesterEmail: null });
+  });
+
+  it("ignores a status sent in the form", async () => {
+    await expect(
+      submitTicket(undefined, formData({ requesterName: "Ada", subject: "Spoof", description: "x", status: "closed" })),
+    ).rejects.toThrow("NEXT_REDIRECT");
+
+    const [saved] = await db.select().from(tickets);
+    expect(saved).toMatchObject({ status: "open" });
   });
 });

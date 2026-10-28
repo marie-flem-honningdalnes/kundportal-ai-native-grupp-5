@@ -4,16 +4,14 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { TicketList } from "@/components/TicketList";
 import { getDb } from "@/db/client";
-import { getCurrentCustomerId } from "@/lib/currentCustomer";
-import { listTicketsForCustomer } from "@/tickets/ticketRepository";
+import { listTickets } from "@/tickets/ticketRepository";
 
 export const metadata: Metadata = { title: "Tickets" };
 
-async function CustomerTickets() {
+async function AllTickets() {
   // Ticket data is per request: render it at request time, never at build time.
   await connection();
-  const db = getDb();
-  const tickets = await listTicketsForCustomer(db, await getCurrentCustomerId(db));
+  const tickets = await listTickets(getDb());
   return <TicketList tickets={tickets} />;
 }
 
@@ -30,7 +28,7 @@ export default function TicketsPage() {
         </Link>
       </div>
       <Suspense fallback={<p className="text-slate-600">Loading tickets…</p>}>
-        <CustomerTickets />
+        <AllTickets />
       </Suspense>
     </div>
   );

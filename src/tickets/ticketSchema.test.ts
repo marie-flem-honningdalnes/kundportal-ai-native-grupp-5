@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { newTicketSchema } from "./ticketSchema";
 
-const valid = { subject: "Cannot download invoice", description: "The PDF link returns an error." };
+const valid = { requesterName: "Ada Lovelace", subject: "Cannot download invoice", description: "The PDF link returns an error." };
 
 describe("newTicketSchema", () => {
   it("accepts a valid ticket and defaults priority to normal", () => {
@@ -11,7 +11,7 @@ describe("newTicketSchema", () => {
   });
 
   it("trims whitespace around subject and description", () => {
-    const result = newTicketSchema.safeParse({ subject: "  Hello there  ", description: "  Body  " });
+    const result = newTicketSchema.safeParse({ requesterName: "Ada", subject: "  Hello there  ", description: "  Body  " });
     expect(result.data).toMatchObject({ subject: "Hello there", description: "Body" });
   });
 
@@ -35,9 +35,24 @@ describe("newTicketSchema", () => {
     expect(newTicketSchema.safeParse({ ...valid, priority: "urgent" }).success).toBe(false);
   });
 
-  it("strips unknown fields such as status or customerId", () => {
-    const result = newTicketSchema.safeParse({ ...valid, status: "closed", customerId: 99 });
+  it("requires a requester name and trims it", () => {
+    expect(newTicketSchema.safeParse({ ...valid, requesterName: "" }).error?.issues[0]?.path).toEqual(["requesterName"]);
+    expect(newTicketSchema.safeParse({ ...valid, requesterName: "x".repeat(121) }).success).toBe(false);
+    expect(newTicketSchema.safeParse({ ...valid, requesterName: "  Ada  " }).data?.requesterName).toBe("Ada");
+  });
+
+  it("treats the requester email as optional but rejects an invalid one", () => {
+    expect(newTicketSchema.safeParse(valid).data?.requesterEmail).toBeUndefined();
+    expect(newTicketSchema.safeParse({ ...valid, requesterEmail: "" }).data?.requesterEmail).toBeUndefined();
+    expect(newTicketSchema.safeParse({ ...valid, requesterEmail: " ada@example.com " }).data?.requesterEmail).toBe(
+      "ada@example.com",
+    );
+    const result = newTicketSchema.safeParse({ ...valid, requesterEmail: "not-an-email" });
+    expect(result.error?.issues[0]?.path).toEqual(["requesterEmail"]);
+  });
+
+  it("strips unknown fields such as status", () => {
+    const result = newTicketSchema.safeParse({ ...valid, status: "closed" });
     expect(result.data).not.toHaveProperty("status");
-    expect(result.data).not.toHaveProperty("customerId");
   });
 });

@@ -16,7 +16,7 @@ export function PortalShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-full flex-1 flex-col">
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-8 gap-y-2 px-4 py-3">
-          <span className="text-lg font-semibold text-slate-900">Customer Portal</span>
+          <span className="text-lg font-semibold text-slate-900">Kundserviceportalen</span>
           <nav aria-label="Main">
             <ul className="flex flex-wrap gap-1">
               {navItems.map((item) => {

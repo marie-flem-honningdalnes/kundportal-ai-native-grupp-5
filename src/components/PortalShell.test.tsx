@@ -16,7 +16,7 @@ describe("PortalShell", () => {
 
   it("renders a banner with the portal name", () => {
     render(<PortalShell>content</PortalShell>);
-    expect(within(screen.getByRole("banner")).getByText("Customer Portal")).toBeInTheDocument();
+    expect(within(screen.getByRole("banner")).getByText("Kundserviceportalen")).toBeInTheDocument();
   });
 
   it("renders one navigation link per nav item", () => {

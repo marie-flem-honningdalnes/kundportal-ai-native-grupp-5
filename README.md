@@ -53,9 +53,9 @@ Följ den aktuella instruktionen och deadlinen i Disco.
 
 ---
 
-## Customer Portal (the app)
+## Kundserviceportalen (the app)
 
-A customer portal built with Next.js 16 (App Router, React 19), TypeScript and Tailwind CSS. Customers can see the support tickets they've submitted and submit new ones.
+A customer service portal for case handlers, built with Next.js 16 (App Router, React 19), TypeScript and Tailwind CSS. A handler registers a ticket on behalf of the person who contacted the company (name, optional email), sees all tickets in one list, and follows them through a simple workflow.
 
 Data lives in SQLite through [libSQL](https://github.com/tursodatabase/libsql): a local file in development, [Turso](https://turso.tech) when hosted. [Drizzle ORM](https://orm.drizzle.team) handles queries and migrations.
 
@@ -77,7 +77,7 @@ npm run dev
 
 Then open http://localhost:3000.
 
-There's no sign-in yet. Every request acts as the seeded demo customer (`getCurrentCustomerId` in `src/lib/currentCustomer.ts`), and that one function is what authentication will replace.
+There's no sign-in yet: anyone who opens the app is treated as a case handler and sees every ticket.
 
 ### Commands
 
@@ -92,7 +92,7 @@ There's no sign-in yet. Every request acts as the seeded demo customer (`getCurr
 | `npm run test:e2e` | Reset a separate `data/e2e.db`, build, and run the Playwright tests |
 | `npm run db:generate` | Create a migration in `drizzle/` from changes to `src/db/schema.ts` |
 | `npm run db:migrate` | Apply migrations to `DATABASE_URL` |
-| `npm run db:seed` | Insert demo customers and tickets |
+| `npm run db:seed` | Insert demo tickets |
 | `npm run db:reset` | Delete the local database file, then migrate and seed (local files only) |
 
 ### Test-driven development
@@ -115,7 +115,7 @@ src/app/                 routes (App Router); (portal)/ holds the pages that sha
 src/components/          React components (+ tests)
 src/tickets/             ticket validation (zod) and data access
 src/db/                  Drizzle schema, client, migrate/seed/reset scripts
-src/lib/                 navigation, current-customer stub
+src/lib/                 navigation
 src/test-utils/          Vitest setup and test database helpers
 drizzle/                 generated SQL migrations (commit these)
 e2e/                     Playwright specs

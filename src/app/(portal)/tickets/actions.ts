@@ -3,11 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/db/client";
-import { getCurrentCustomerId } from "@/lib/currentCustomer";
 import { createTicket } from "@/tickets/ticketRepository";
 import { newTicketSchema } from "@/tickets/ticketSchema";
 
-type TicketFormValues = { subject: string; description: string; priority: string };
+type TicketFormValues = { requesterName: string; requesterEmail: string; subject: string; description: string; priority: string };
 
 export type SubmitTicketState =
   | {
@@ -18,6 +17,8 @@ export type SubmitTicketState =
 
 export async function submitTicket(_prev: SubmitTicketState, formData: FormData): Promise<SubmitTicketState> {
   const values: TicketFormValues = {
+    requesterName: String(formData.get("requesterName") ?? ""),
+    requesterEmail: String(formData.get("requesterEmail") ?? ""),
     subject: String(formData.get("subject") ?? ""),
     description: String(formData.get("description") ?? ""),
     priority: String(formData.get("priority") ?? ""),
@@ -29,8 +30,7 @@ export async function submitTicket(_prev: SubmitTicketState, formData: FormData)
     return { errors: fieldErrors, values };
   }
 
-  const db = getDb();
-  await createTicket(db, await getCurrentCustomerId(db), parsed.data);
+  await createTicket(getDb(), parsed.data);
 
   revalidatePath("/tickets");
   redirect("/tickets");

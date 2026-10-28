@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Customer Portal", template: "%s · Customer Portal" },
+  title: { default: "Kundserviceportalen", template: "%s · Kundserviceportalen" },
   description: "View and submit support tickets.",
 };
 

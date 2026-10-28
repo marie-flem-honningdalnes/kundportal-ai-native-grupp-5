@@ -2,14 +2,8 @@ import { describe, expect, it } from "vitest";
 import { navItems } from "./navigation";
 
 describe("navItems", () => {
-  it("lists the customer portal sections in order", () => {
-    expect(navItems.map((item) => item.label)).toEqual([
-      "Dashboard",
-      "Tickets",
-      "Orders",
-      "Invoices",
-      "Account",
-    ]);
+  it("lists the case handler sections in order", () => {
+    expect(navItems.map((item) => item.label)).toEqual(["Dashboard", "Tickets"]);
   });
 
   it("gives every item a unique absolute href", () => {

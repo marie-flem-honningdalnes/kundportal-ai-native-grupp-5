@@ -28,6 +28,41 @@ export function TicketForm({ action }: TicketFormProps) {
   return (
     // Remount with the returned values: React resets a form after its action runs.
     <form key={JSON.stringify(values)} action={formAction} noValidate className="space-y-5">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="requesterName" className="block text-sm font-medium text-slate-800">
+            Requester name
+          </label>
+          <input
+            id="requesterName"
+            name="requesterName"
+            required
+            maxLength={120}
+            defaultValue={values?.requesterName}
+            aria-invalid={errors.requesterName ? true : undefined}
+            aria-describedby={errors.requesterName ? "requesterName-error" : undefined}
+            className={inputClass}
+          />
+          <FieldError id="requesterName-error" messages={errors.requesterName} />
+        </div>
+        <div>
+          <label htmlFor="requesterEmail" className="block text-sm font-medium text-slate-800">
+            Requester email (optional)
+          </label>
+          <input
+            id="requesterEmail"
+            name="requesterEmail"
+            type="email"
+            maxLength={254}
+            defaultValue={values?.requesterEmail}
+            aria-invalid={errors.requesterEmail ? true : undefined}
+            aria-describedby={errors.requesterEmail ? "requesterEmail-error" : undefined}
+            className={inputClass}
+          />
+          <FieldError id="requesterEmail-error" messages={errors.requesterEmail} />
+        </div>
+      </div>
+
       <div>
         <label htmlFor="subject" className="block text-sm font-medium text-slate-800">
           Subject
@@ -89,7 +124,7 @@ export function TicketForm({ action }: TicketFormProps) {
         disabled={pending}
         className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {pending ? "Submitting…" : "Submit ticket"}
+        {pending ? "Registering…" : "Register ticket"}
       </button>
     </form>
   );

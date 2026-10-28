@@ -7,6 +7,18 @@ export type TicketStatus = (typeof ticketStatuses)[number];
 export type TicketPriority = (typeof ticketPriorities)[number];
 
 export const newTicketSchema = z.object({
+  requesterName: z
+    .string()
+    .trim()
+    .min(1, "Please enter who contacted us.")
+    .max(120, "Name must be at most 120 characters."),
+  requesterEmail: z
+    .string()
+    .trim()
+    .max(254, "Email must be at most 254 characters.")
+    .pipe(z.union([z.literal(""), z.email("Please enter a valid email address.")]))
+    .transform((email) => email || undefined)
+    .optional(),
   subject: z
     .string()
     .trim()
