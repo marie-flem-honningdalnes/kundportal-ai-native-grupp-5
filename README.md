@@ -74,3 +74,77 @@ Varje student lämnar sin individuella redovisning som en **Markdown-fil (.md) i
 Den individuella redovisningen ska inte läggas i teamets repository eller länkas från teamets PR. Du behöver inte dela dokumentet med dina klasskamrater. Gruppens kod, tester och gemensamma dokumentation finns fortsatt på GitHub.
 
 Följ den aktuella instruktionen och deadlinen i Disco.
+
+---
+
+## Kundserviceportalen (the app)
+
+A customer service portal for case handlers, built with Next.js 16 (App Router, React 19), TypeScript and Tailwind CSS. A handler registers a ticket on behalf of the person who contacted the company (name, optional email), sees all tickets in one list, and follows them through a simple workflow.
+
+Data lives in SQLite through [libSQL](https://github.com/tursodatabase/libsql): a local file in development, [Turso](https://turso.tech) when hosted. [Drizzle ORM](https://orm.drizzle.team) handles queries and migrations.
+
+> Agents working in this repo must follow [CLAUDE.md](CLAUDE.md). They never commit, push or merge; the owners do that. `.claude/settings.json` blocks those git commands for Claude Code.
+
+### Requirements
+
+- Node.js 24 or later (`.nvmrc` pins the major version)
+- Google Chrome, for the end-to-end tests run locally
+
+### Getting started
+
+```bash
+npm install
+cp .env.example .env.local   # optional; the defaults use ./data/dev.db
+npm run db:reset             # create, migrate and seed the local database
+npm run dev
+```
+
+Then open http://localhost:3000.
+
+There's no sign-in yet: anyone who opens the app is treated as a case handler and sees every ticket.
+
+### Commands
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` / `npm run start` | Build for production / serve the build |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Generate route types, then check types with TypeScript |
+| `npm test` | Run unit and component tests once (Vitest) |
+| `npm run test:watch` | Run Vitest in watch mode while you develop |
+| `npm run test:e2e` | Reset a separate `data/e2e.db`, build, and run the Playwright tests |
+| `npm run db:generate` | Create a migration in `drizzle/` from changes to `src/db/schema.ts` |
+| `npm run db:migrate` | Apply migrations to `DATABASE_URL` |
+| `npm run db:seed` | Insert demo tickets |
+| `npm run db:reset` | Delete the local database file, then migrate and seed (local files only) |
+
+### Test-driven development
+
+Every change starts with a failing test:
+
+1. **Red:** write a test that describes the behaviour, then run it and watch it fail for the right reason.
+2. **Green:** write the least code that makes it pass.
+3. **Refactor:** tidy up with the tests still green.
+
+Where each kind of test goes:
+
+- **Unit and component tests** (Vitest + React Testing Library) sit next to the code as `*.test.ts(x)`. Database tests run against a fresh in-memory SQLite per test (`src/test-utils/testDb.ts`) and use `// @vitest-environment node`.
+- **End-to-end tests** (Playwright) live in `e2e/`. They run against a production build and a freshly seeded `data/e2e.db`. Async Server Components can't be unit-tested with Vitest, so cover them here.
+
+### Project layout
+
+```
+src/app/                 routes (App Router); (portal)/ holds the pages that share the portal shell
+src/components/          React components (+ tests)
+src/tickets/             ticket validation (zod) and data access
+src/db/                  Drizzle schema, client, migrate/seed/reset scripts
+src/lib/                 navigation
+src/test-utils/          Vitest setup and test database helpers
+drizzle/                 generated SQL migrations (commit these)
+e2e/                     Playwright specs
+```
+
+### Deploying with Turso
+
+Create a database on Turso, then set `DATABASE_URL=libsql://<db>-<org>.turso.io` and `DATABASE_AUTH_TOKEN` in the hosting environment, and run `npm run db:migrate` against it before starting the app.
