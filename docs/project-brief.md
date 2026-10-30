@@ -1,20 +1,12 @@
-# Project Brief: Kundserviceportalen
+# Project Brief and Specification: Kundserviceportalen
 
 ## Overview
 
-Kundserviceportalen is a customer portal where customers submit support tickets and follow them over time. A customer can see all tickets they have submitted, open a ticket to read its details, and track status updates as the ticket progresses.
+Kundserviceportalen is a customer service portal for case handlers. A handler registers a ticket on behalf of the person who contacted the company (name, optional email), sees all tickets in one list, and follows them through a simple workflow.
 
-## Target users
+## Users
 
-- **Customers** who need help and want to know what happened to their request.
-- **Support staff** (secondary, for the MVP): change a ticket's status so customers can see progress.
-
-## Key workflows
-
-1. **Submit a ticket.** The customer fills in a form (e.g. subject, description, category). Input is validated on the server and the ticket is saved with an initial status.
-2. **View ticket list.** The customer sees their previously submitted tickets with subject, status, and date.
-3. **View ticket details.** The customer opens a ticket to see the full description and its history.
-4. **Track status changes.** Each status change (e.g. Open, In progress, Resolved) is stored and shown on the ticket.
+- **Case handlers**: register and follow tickets. There is no sign-in yet; everyone who opens the app is treated as a case handler.
 
 ## Tech stack
 
@@ -23,23 +15,61 @@ Kundserviceportalen is a customer portal where customers submit support tickets 
 | Framework | Next.js 16 (App Router, React 19) |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
-| Database | SQLite via libSQL (local file in development, Turso when hosted) |
+| Database | SQLite via libSQL (local file) |
 | ORM | Drizzle ORM (schema, migrations, queries) |
-| Testing | Vitest (logic, validation, route tests) |
+| Validation | zod |
+| Testing | Vitest + React Testing Library, Playwright |
 
-## MVP scope boundaries
+Reasons for the choices are recorded in [docs/decisions/](decisions/README.md).
 
-- **Local-first.** Runs as a local application; data persists in a local SQLite file and survives restarts.
-- **Fake data only.** All customers and tickets are invented.
-- **Zero external dependencies.** No cloud infrastructure, no external email APIs, no external authentication services (e.g. Okta).
-- Hosting on Turso is a possible later step, not part of the MVP.
+## Scope
 
-## Initial milestone
+- **Local-first.** Runs locally; data persists in a local SQLite file and survives restarts.
+- **Fake data only.** All requesters and tickets are invented.
+- **No external services.** No cloud infrastructure, email APIs or external authentication.
 
-Deliver a minimal, functional full-stack boilerplate that connects:
+### Out of scope
 
-- the **UI** (Next.js pages styled with Tailwind),
-- **server logic** (route handlers or server actions with validation), and
-- **persistent storage** (Drizzle ORM on a local libSQL/SQLite file).
+- Sign-in and roles.
+- Customers submitting or viewing their own tickets.
+- Sending email.
 
-Success means the app builds, the database schema can be pushed, the dev server runs, and data written through the UI is still there after a restart.
+## Workflows and acceptance criteria
+
+Status: **Done** = implemented and tested, **Planned** = not built yet. Each criterion is mapped to its tests in [docs/verification.md](verification.md).
+
+### 1. Register a ticket (Done)
+
+- AC1.1: Given a valid name, subject and description, when the handler submits the form, then the ticket is saved with status `open` and the handler is redirected to the ticket list.
+- AC1.2: Priority is `low`, `normal` or `high` and defaults to `normal`.
+- AC1.3: The requester email is optional. If given, it must be a valid email address.
+- AC1.4: Given invalid input, when the handler submits, then nothing is saved, the field errors are shown, and the entered values are kept.
+- AC1.5: Input is validated on the server: name 1-120 characters, subject 3-120, description 1-5000, email at most 254.
+- AC1.6: A status sent in the form is ignored; a new ticket always starts as `open`.
+
+### 2. List tickets (Done)
+
+- AC2.1: The list shows every ticket with subject, requester, status, priority and date.
+- AC2.2: Tickets are sorted newest first.
+- AC2.3: When there are no tickets, an empty state is shown.
+
+### 3. Navigate the portal (Done)
+
+- AC3.1: `/` redirects to `/dashboard`.
+- AC3.2: The main navigation has links to Dashboard and Tickets, reachable by keyboard, with the current page marked `aria-current="page"`.
+
+### 4. View ticket details (Planned)
+
+- AC4.1: Given a ticket in the list, when the handler opens it, then the full description and requester details are shown.
+
+### 5. Change status and track history (Planned)
+
+- AC5.1: The handler can change a ticket's status between `open`, `in_progress` and `closed`.
+- AC5.2: Each status change is stored with a timestamp and shown on the ticket.
+- AC5.3: Only the allowed status values are accepted.
+
+## Milestones
+
+1. Boilerplate: UI, server logic and storage connected (done).
+2. Register and list tickets, tested (done).
+3. Ticket details and status tracking with history (next).

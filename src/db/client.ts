@@ -10,7 +10,7 @@ export function createDb(url: string, authToken?: string): Db {
 
 let db: Db | undefined;
 
-/** The app's database, configured from DATABASE_URL (and DATABASE_AUTH_TOKEN for Turso). */
+/** The app's database, configured from DATABASE_URL (and an optional DATABASE_AUTH_TOKEN for remote libSQL). */
 export function getDb(): Db {
   db ??= createDb(process.env.DATABASE_URL ?? "file:./data/dev.db", process.env.DATABASE_AUTH_TOKEN);
   return db;

@@ -12,7 +12,12 @@
       "Bash(gh pr create:*)",
       "Bash(gh pr merge:*)",
       "Bash(gh pr review:*)",
-      "Read(./.env*)"
+      "Read(./.env*)",
+      "Edit(./.env*)",
+      "Edit(./drizzle/**)",
+      "Edit(./package-lock.json)",
+      "Edit(./AGENTS.md)",
+      "Edit(./node_modules/**)"
     ]
   }
 }
