@@ -7,7 +7,7 @@ export function TicketNotice({ notice }: { notice: string | undefined }) {
   if (!message) return null;
 
   return (
-    <p role="status" className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+    <p role="status" className="sticker rounded-2xl bg-cap-yellow-soft px-4 py-3 text-sm font-medium text-ink">
       {message}
     </p>
   );

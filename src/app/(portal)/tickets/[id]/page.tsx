@@ -42,7 +42,7 @@ async function SelectedTicket({ params }: { params: Promise<{ id: string }> }) {
 
 export default function TicketPage({ params }: { params: Promise<{ id: string }> }) {
   return (
-    <Suspense fallback={<p className="text-slate-600">Loading ticket…</p>}>
+    <Suspense fallback={<p className="text-ink/70">Loading ticket…</p>}>
       <SelectedTicket params={params} />
     </Suspense>
   );

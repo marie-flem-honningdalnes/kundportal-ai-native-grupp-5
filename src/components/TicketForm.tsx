@@ -9,12 +9,12 @@ type TicketFormProps = {
 };
 
 const inputClass =
-  "mt-1 block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/30 aria-invalid:border-red-600";
+  "mt-1 block w-full rounded-xl border-2 border-ink/20 bg-white px-3 py-2 text-ink focus:border-cap-blue focus:outline-none focus:ring-4 focus:ring-cap-blue/20 aria-invalid:border-cap-red-deep";
 
 function FieldError({ id, messages }: { id: string; messages?: string[] }) {
   if (!messages?.length) return null;
   return (
-    <p id={id} className="mt-1 text-sm text-red-700">
+    <p id={id} className="mt-1 text-sm text-cap-red-deep">
       {messages.join(" ")}
     </p>
   );
@@ -30,7 +30,7 @@ export function TicketForm({ action }: TicketFormProps) {
     <form key={JSON.stringify(values)} action={formAction} noValidate className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="requesterName" className="block text-sm font-medium text-slate-800">
+          <label htmlFor="requesterName" className="block text-sm font-semibold text-ink">
             Requester name
           </label>
           <input
@@ -46,7 +46,7 @@ export function TicketForm({ action }: TicketFormProps) {
           <FieldError id="requesterName-error" messages={errors.requesterName} />
         </div>
         <div>
-          <label htmlFor="requesterEmail" className="block text-sm font-medium text-slate-800">
+          <label htmlFor="requesterEmail" className="block text-sm font-semibold text-ink">
             Requester email (optional)
           </label>
           <input
@@ -64,7 +64,7 @@ export function TicketForm({ action }: TicketFormProps) {
       </div>
 
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="subject" className="block text-sm font-semibold text-ink">
           Subject
         </label>
         <input
@@ -81,7 +81,7 @@ export function TicketForm({ action }: TicketFormProps) {
       </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="description" className="block text-sm font-semibold text-ink">
           Description
         </label>
         <textarea
@@ -100,7 +100,7 @@ export function TicketForm({ action }: TicketFormProps) {
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-slate-800">
+          <label htmlFor="category" className="block text-sm font-semibold text-ink">
             Category
           </label>
           <input
@@ -116,7 +116,7 @@ export function TicketForm({ action }: TicketFormProps) {
           <FieldError id="category-error" messages={errors.category} />
         </div>
         <div>
-          <label htmlFor="priority" className="block text-sm font-medium text-slate-800">
+          <label htmlFor="priority" className="block text-sm font-semibold text-ink">
             Priority
           </label>
           <select
@@ -146,7 +146,7 @@ export function TicketForm({ action }: TicketFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
+        className="sticker rounded-full bg-cap-green px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cap-blue disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
       >
         {pending ? "Registering…" : "Register ticket"}
       </button>

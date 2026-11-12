@@ -29,10 +29,12 @@ export default function TicketsPage({
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Tickets</h1>
+        <h1 className="bg-[linear-gradient(transparent_62%,var(--color-cap-blue-soft)_62%)] px-1 font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl">
+          Tickets
+        </h1>
         <Link
           href="/tickets/new"
-          className="rounded-md bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="sticker rounded-full bg-cap-green px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cap-blue motion-reduce:transition-none"
         >
           New ticket
         </Link>
@@ -40,7 +42,7 @@ export default function TicketsPage({
       <Suspense>
         <Notice searchParams={searchParams} />
       </Suspense>
-      <Suspense fallback={<p className="text-slate-600">Loading tickets…</p>}>
+      <Suspense fallback={<p className="text-ink/70">Loading tickets…</p>}>
         <AllTickets />
       </Suspense>
     </div>

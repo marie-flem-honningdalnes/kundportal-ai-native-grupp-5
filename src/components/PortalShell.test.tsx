@@ -19,6 +19,12 @@ describe("PortalShell", () => {
     expect(within(screen.getByRole("banner")).getByText("Kundserviceportalen")).toBeInTheDocument();
   });
 
+  it("shows a decorative propeller cap next to the portal name, hidden from screen readers", () => {
+    render(<PortalShell>content</PortalShell>);
+    const name = within(screen.getByRole("banner")).getByText("Kundserviceportalen");
+    expect(name.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+  });
+
   it("renders one navigation link per nav item", () => {
     render(<PortalShell>content</PortalShell>);
     const nav = screen.getByRole("navigation", { name: "Main" });

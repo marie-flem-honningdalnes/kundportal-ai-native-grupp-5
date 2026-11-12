@@ -7,9 +7,9 @@ import { statusLabels } from "@/tickets/statusLabels";
 import type { TicketPriority, TicketStatus } from "@/tickets/ticketSchema";
 
 const statusStyles: Record<TicketStatus, string> = {
-  open: "bg-blue-100 text-blue-800",
-  in_progress: "bg-amber-100 text-amber-800",
-  closed: "bg-slate-200 text-slate-700",
+  open: "bg-cap-blue-soft text-cap-blue",
+  in_progress: "bg-cap-yellow-soft text-ink",
+  closed: "bg-cap-green-soft text-cap-green-deep",
 };
 
 const priorityLabels: Record<TicketPriority, string> = {
@@ -32,32 +32,36 @@ export function TicketDetails({ ticket, changes, statusAction, children }: Ticke
     <article className="max-w-3xl space-y-6">
       <Link
         href="/tickets"
-        className="text-sm text-slate-600 underline hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        className="sticker inline-block rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-ink hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cap-blue"
       >
         Back to tickets
       </Link>
-      <h1 className="wrap-break-word text-2xl font-semibold">{ticket.subject}</h1>
-      <dl className="grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 text-sm">
-        <dt className="font-medium text-slate-600">Status</dt>
+      <div className="sticker rounded-3xl bg-cap-red-soft p-6 sm:p-8">
+        <h1 className="wrap-break-word font-display text-4xl font-extrabold tracking-[-0.03em] sm:text-5xl">
+          {ticket.subject}
+        </h1>
+      </div>
+      <dl className="sticker grid grid-cols-[max-content_1fr] gap-x-6 gap-y-2 rounded-2xl bg-white p-5 text-sm">
+        <dt className="font-semibold text-ink/70">Status</dt>
         <dd>
-          <span className={`rounded-full px-2 py-1 text-xs font-medium ${statusStyles[ticket.status]}`}>
+          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${statusStyles[ticket.status]}`}>
             {statusLabels[ticket.status]}
           </span>
         </dd>
-        <dt className="font-medium text-slate-600">Priority</dt>
-        <dd className="text-slate-700">{priorityLabels[ticket.priority]}</dd>
-        <dt className="font-medium text-slate-600">Created</dt>
-        <dd className="text-slate-700">
+        <dt className="font-semibold text-ink/70">Priority</dt>
+        <dd className="text-ink">{priorityLabels[ticket.priority]}</dd>
+        <dt className="font-semibold text-ink/70">Created</dt>
+        <dd className="text-ink">
           <time dateTime={ticket.createdAt.toISOString()}>{dateFormat.format(ticket.createdAt)}</time>
         </dd>
-        <dt className="font-medium text-slate-600">Requester</dt>
-        <dd className="text-slate-700">{ticket.requesterName}</dd>
-        <dt className="font-medium text-slate-600">Email</dt>
-        <dd className="text-slate-700">{ticket.requesterEmail ?? "No email given"}</dd>
+        <dt className="font-semibold text-ink/70">Requester</dt>
+        <dd className="text-ink">{ticket.requesterName}</dd>
+        <dt className="font-semibold text-ink/70">Email</dt>
+        <dd className="text-ink">{ticket.requesterEmail ?? "No email given"}</dd>
       </dl>
       <section aria-label="Description" className="space-y-2">
-        <h2 className="text-lg font-semibold">Description</h2>
-        <p className="wrap-break-word whitespace-pre-wrap rounded-lg border border-slate-200 bg-white p-4 text-slate-800">
+        <h2 className="font-display text-xl font-bold">Description</h2>
+        <p className="wrap-break-word whitespace-pre-wrap sticker rounded-2xl bg-white p-4 text-ink">
           {ticket.description}
         </p>
       </section>

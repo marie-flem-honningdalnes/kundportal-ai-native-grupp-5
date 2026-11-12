@@ -3,4 +3,42 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-bricolage);
+}
+
+@theme {
+  --color-cap-red: #e63946;
+  --color-cap-yellow: #ffb703;
+  --color-cap-blue: #1d4ed8;
+  --color-cap-green: #2a9d8f;
+  /* Darker variants for text, and for white text on a coloured background. */
+  --color-cap-red-deep: #c1121f;
+  --color-cap-green-deep: #1f6f66;
+  --color-cap-red-soft: #fde2e4;
+  --color-cap-yellow-soft: #fff1c7;
+  --color-cap-blue-soft: #dbe5ff;
+  --color-cap-green-soft: #d5f0ec;
+  --color-cream: #fbf7ef;
+  --color-ink: #1a1a2e;
+}
+
+/* Cards and buttons: a thick ink border and a hard offset shadow. */
+@utility sticker {
+  border: 2px solid var(--color-ink);
+  box-shadow: 4px 4px 0 var(--color-ink);
+}
+
+body {
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--color-cap-blue) 15%, transparent) 1.5px, transparent 2px),
+    radial-gradient(circle, color-mix(in srgb, var(--color-cap-red) 15%, transparent) 1.5px, transparent 2px);
+  background-size: 32px 32px;
+  background-position:
+    0 0,
+    16px 16px;
+}
+
+::selection {
+  background: var(--color-cap-yellow);
+  color: var(--color-ink);
 }
