@@ -1,31 +1,129 @@
 @import "tailwindcss";
 
+/* Styles that only apply in the Rosé theme, e.g. `rose:rotate-0`. */
+@custom-variant rose (&:is([data-theme="rose"] *));
+
 @theme inline {
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-bricolage);
+  --font-display: var(--font-heading);
+
+  /* Semantic colours. Components use these names; each theme sets the values below. */
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-action: var(--action);
+  --color-action-soft: var(--action-soft);
+  --color-highlight: var(--highlight);
+  --color-highlight-soft: var(--highlight-soft);
+  --color-brand-soft: var(--brand-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
 }
 
+/* The propeller cap palette, used by the logo and the header stripe. */
 @theme {
   --color-cap-red: #e63946;
   --color-cap-yellow: #ffb703;
   --color-cap-blue: #1d4ed8;
   --color-cap-green: #2a9d8f;
-  /* Darker variants for text, and for white text on a coloured background. */
-  --color-cap-red-deep: #c1121f;
-  --color-cap-green-deep: #1f6f66;
-  --color-cap-red-soft: #fde2e4;
-  --color-cap-yellow-soft: #fff1c7;
-  --color-cap-blue-soft: #dbe5ff;
-  --color-cap-green-soft: #d5f0ec;
-  --color-cream: #fbf7ef;
-  --color-ink: #1a1a2e;
+
+  /* The champagne glass palette, used by the Rosé logo. */
+  --color-glass-gold: #b8925a;
+  --color-glass-rose: #ebbcc2;
+  --color-glass-foam: #fbeae8;
+
+  --animate-bubble-rise: bubble-rise 1.4s ease-out infinite;
+
+  @keyframes bubble-rise {
+    0% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    60% {
+      transform: translateY(-7px);
+      opacity: 0;
+    }
+    61% {
+      transform: translateY(3px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 }
 
-/* Cards and buttons: a thick ink border and a hard offset shadow. */
-@utility sticker {
-  border: 2px solid var(--color-ink);
-  box-shadow: 4px 4px 0 var(--color-ink);
+/* Propeller theme (default). */
+:root {
+  --font-body: var(--font-geist-sans);
+  --font-heading: var(--font-bricolage);
+
+  --canvas: #fbf7ef;
+  --surface: #ffffff;
+  --ink: #1a1a2e;
+  --accent: #1d4ed8;
+  --accent-soft: #dbe5ff;
+  --action: #2a9d8f;
+  --action-soft: #d5f0ec;
+  --highlight: #ffb703;
+  --highlight-soft: #fff1c7;
+  --brand-soft: #fde2e4;
+  /* Darker variants for text, and for white text on a coloured background. */
+  --danger: #c1121f;
+  --danger-soft: #fde2e4;
+  --success: #1f6f66;
+  --success-soft: #d5f0ec;
+
+  --card-border: 2px solid var(--ink);
+  --card-shadow: 4px 4px 0 var(--ink);
+
+  --header-stripe-height: 0.375rem;
+  --header-stripe: linear-gradient(
+    90deg,
+    var(--color-cap-red) 0 25%,
+    var(--color-cap-yellow) 25% 50%,
+    var(--color-cap-blue) 50% 75%,
+    var(--color-cap-green) 75%
+  );
+}
+
+/* Rosé theme: rosé champagne, ivory and aubergine, with soft shadows and a gold hairline. */
+[data-theme="rose"] {
+  --font-body: var(--font-jost);
+  --font-heading: var(--font-cormorant);
+
+  --canvas: #f8f1ec;
+  --surface: #fffcfa;
+  --ink: #3a2530;
+  --accent: #8e3f53;
+  --accent-soft: #f3e0e2;
+  --action: #d9bf94;
+  --action-soft: #f4e8d6;
+  --highlight: #efd9d3;
+  --highlight-soft: #f7ece6;
+  --brand-soft: #f3e0e2;
+  --danger: #9f2338;
+  --danger-soft: #f8e1e4;
+  --success: #4f6b56;
+  --success-soft: #e4ece5;
+
+  --card-border: 1px solid #ead9d3;
+  --card-shadow: 0 1px 2px rgb(58 37 48 / 0.06), 0 12px 32px -12px rgb(142 63 83 / 0.25);
+
+  --header-stripe-height: 1px;
+  --header-stripe: linear-gradient(90deg, transparent, var(--color-glass-gold) 20% 80%, transparent);
+}
+
+/* Cards and buttons. Propeller: a thick ink border and a hard offset shadow. */
+@utility card {
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
 }
 
 body {
@@ -38,7 +136,16 @@ body {
     16px 16px;
 }
 
+/* Rosé: a soft blush glow instead of the dots. */
+[data-theme="rose"] body {
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgb(239 217 211 / 0.8), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgb(217 191 148 / 0.25), transparent 50%);
+  background-size: auto;
+  background-attachment: fixed;
+}
+
 ::selection {
-  background: var(--color-cap-yellow);
+  background: var(--color-highlight);
   color: var(--color-ink);
 }

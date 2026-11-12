@@ -25,6 +25,19 @@ describe("PortalShell", () => {
     expect(name.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
   });
 
+  it("shows one decorative logo per theme next to the portal name", () => {
+    render(<PortalShell>content</PortalShell>);
+    const name = within(screen.getByRole("banner")).getByText("Kundserviceportalen");
+    const logos = [...name.querySelectorAll("svg[data-logo]")];
+    expect(logos.map((logo) => logo.getAttribute("data-logo"))).toEqual(["propeller", "rose"]);
+    for (const logo of logos) expect(logo).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("shows the theme switcher in the banner", () => {
+    render(<PortalShell>content</PortalShell>);
+    expect(within(screen.getByRole("banner")).getByRole("group", { name: "Theme" })).toBeInTheDocument();
+  });
+
   it("renders one navigation link per nav item", () => {
     render(<PortalShell>content</PortalShell>);
     const nav = screen.getByRole("navigation", { name: "Main" });

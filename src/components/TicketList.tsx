@@ -4,9 +4,9 @@ import { statusLabels } from "@/tickets/statusLabels";
 import type { TicketPriority, TicketStatus } from "@/tickets/ticketSchema";
 
 const statusStyles: Record<TicketStatus, string> = {
-  open: "bg-cap-blue-soft text-cap-blue",
-  in_progress: "bg-cap-yellow-soft text-ink",
-  closed: "bg-cap-green-soft text-cap-green-deep",
+  open: "bg-accent-soft text-accent",
+  in_progress: "bg-highlight-soft text-ink",
+  closed: "bg-success-soft text-success",
 };
 
 const priorityLabels: Record<TicketPriority, string> = {
@@ -20,16 +20,16 @@ const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeZ
 export function TicketList({ tickets }: { tickets: Ticket[] }) {
   if (tickets.length === 0) {
     return (
-      <p className="sticker rounded-2xl bg-white p-8 text-center text-ink/70">
+      <p className="card rounded-2xl bg-surface p-8 text-center text-ink/70">
         No tickets yet.
       </p>
     );
   }
 
   return (
-    <div className="sticker overflow-x-auto rounded-2xl bg-white">
+    <div className="card overflow-x-auto rounded-2xl bg-surface">
       <table className="w-full text-left text-sm">
-        <thead className="bg-cap-blue-soft text-ink">
+        <thead className="bg-accent-soft text-ink">
           <tr>
             <th scope="col" className="px-4 py-3 font-semibold">Subject</th>
             <th scope="col" className="px-4 py-3 font-semibold">Requester</th>
@@ -40,11 +40,11 @@ export function TicketList({ tickets }: { tickets: Ticket[] }) {
         </thead>
         <tbody className="divide-y divide-ink/10">
           {tickets.map((ticket) => (
-            <tr key={ticket.id} className="hover:bg-cream">
+            <tr key={ticket.id} className="hover:bg-canvas">
               <td className="wrap-break-word px-4 py-3 font-medium text-ink">
                 <Link
                   href={`/tickets/${ticket.id}`}
-                  className="underline decoration-cap-blue decoration-2 underline-offset-4 hover:text-cap-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cap-blue"
+                  className="underline decoration-accent decoration-2 underline-offset-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   {ticket.subject}
                 </Link>
@@ -57,7 +57,7 @@ export function TicketList({ tickets }: { tickets: Ticket[] }) {
               </td>
               <td className="px-4 py-3 text-ink/80">
                 {ticket.priority === "high" && (
-                  <span aria-hidden="true" className="mr-1.5 inline-block size-2 rounded-full bg-cap-red-deep" />
+                  <span aria-hidden="true" className="mr-1.5 inline-block size-2 rounded-full bg-danger" />
                 )}
                 {priorityLabels[ticket.priority]}
               </td>

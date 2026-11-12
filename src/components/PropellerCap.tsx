@@ -1,7 +1,7 @@
 // Decorative logo: the propeller spins two turns and slows down when the parent `group` is hovered.
 export function PropellerCap({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 36" aria-hidden="true" className={className}>
+    <svg viewBox="0 0 48 36" aria-hidden="true" data-logo="propeller" className={className}>
       <g className="origin-center transform-fill transition-transform duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:rotate-[720deg] motion-reduce:transition-none">
         <ellipse cx="16" cy="6" rx="8" ry="2.5" fill="var(--color-cap-red)" />
         <ellipse cx="32" cy="6" rx="8" ry="2.5" fill="var(--color-cap-blue)" />

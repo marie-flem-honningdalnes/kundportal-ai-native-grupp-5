@@ -19,9 +19,9 @@ type InternalNotesProps = {
 const dateTimeFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" });
 
 const textareaClass =
-  "block w-full rounded-xl border-2 border-ink/20 bg-white px-3 py-2 text-ink focus:border-cap-blue focus:outline-none focus:ring-4 focus:ring-cap-blue/20 aria-invalid:border-cap-red-deep";
+  "block w-full rounded-xl border-2 border-ink/20 bg-surface px-3 py-2 text-ink focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/20 aria-invalid:border-danger";
 const buttonClass =
-  "sticker cursor-pointer rounded-full bg-cap-blue px-4 py-2 text-sm font-semibold text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cap-blue disabled:opacity-60";
+  "card cursor-pointer rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:opacity-60";
 
 export function InternalNotes({ ticketId, notes, addNote, addNoteComment, deleteNote, deleteNoteComment }: InternalNotesProps) {
   const [alert, setAlert] = useState<string>();
@@ -43,7 +43,7 @@ export function InternalNotes({ ticketId, notes, addNote, addNoteComment, delete
       <h2 id="internal-notes-heading" className="font-display text-xl font-bold">
         Internal notes
       </h2>
-      <div role="alert" className="text-sm text-cap-red-deep">
+      <div role="alert" className="text-sm text-danger">
         {alert}
       </div>
       {/* Remount with the returned values: React resets a form after its action runs. */}
@@ -66,7 +66,7 @@ export function InternalNotes({ ticketId, notes, addNote, addNoteComment, delete
           className={textareaClass}
         />
         {error && (
-          <p id="note-body-error" className="text-sm text-cap-red-deep">
+          <p id="note-body-error" className="text-sm text-danger">
             {error}
           </p>
         )}
@@ -97,7 +97,7 @@ function NoteItem({ note, addComment, deleteNote, deleteComment }: { note: NoteW
   const { error, dismiss, ref } = useDismissableError(state);
 
   return (
-    <li className="sticker rounded-2xl bg-cap-yellow-soft p-4 odd:rotate-[0.5deg] even:-rotate-[0.5deg]">
+    <li className="card rounded-2xl bg-highlight-soft p-4 odd:rotate-[0.5deg] even:-rotate-[0.5deg] rose:rotate-0">
       <p className="wrap-break-word whitespace-pre-wrap text-ink">{note.body}</p>
       <time dateTime={note.createdAt.toISOString()} className="mt-2 block text-xs text-ink/70">
         {dateTimeFormat.format(note.createdAt)}
@@ -109,7 +109,7 @@ function NoteItem({ note, addComment, deleteNote, deleteComment }: { note: NoteW
           dismiss();
           setOpen(!open);
         }}
-        className="mt-2 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-ink bg-white px-3 py-1 text-sm font-semibold text-ink hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cap-blue"
+        className="mt-2 inline-flex cursor-pointer items-center gap-1 rounded-full border-2 border-ink bg-surface px-3 py-1 text-sm font-semibold text-ink hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <span aria-hidden="true">{open ? "▾" : "▸"}</span>
         Comments ({note.comments.length})
@@ -149,7 +149,7 @@ function NoteItem({ note, addComment, deleteNote, deleteComment }: { note: NoteW
               className={textareaClass}
             />
             {error && (
-              <p id={`comment-body-${note.id}-error`} className="text-sm text-cap-red-deep">
+              <p id={`comment-body-${note.id}-error`} className="text-sm text-danger">
                 {error}
               </p>
             )}
@@ -165,7 +165,7 @@ function NoteItem({ note, addComment, deleteNote, deleteComment }: { note: NoteW
 
 function CommentItem({ comment, deleteComment }: { comment: TicketNoteComment; deleteComment: Action }) {
   return (
-    <li className="rounded-xl border-2 border-ink/15 bg-white p-3">
+    <li className="rounded-xl border-2 border-ink/15 bg-surface p-3">
       <p className="wrap-break-word whitespace-pre-wrap text-ink">{comment.body}</p>
       <time dateTime={comment.createdAt.toISOString()} className="mt-1 block text-xs text-ink/70">
         {dateTimeFormat.format(comment.createdAt)}
@@ -211,7 +211,7 @@ function DeleteControl({ action, field, id, label, warning }: { action: Action; 
         type="button"
         aria-label={label}
         onClick={() => setConfirming(true)}
-        className="mt-2 ml-2 inline-flex cursor-pointer items-center rounded-full border-2 border-cap-red-deep bg-white px-3 py-1 text-sm font-semibold text-cap-red-deep hover:bg-cap-red-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cap-red-deep"
+        className="mt-2 ml-2 inline-flex cursor-pointer items-center rounded-full border-2 border-danger bg-surface px-3 py-1 text-sm font-semibold text-danger hover:bg-danger-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
       >
         Delete
       </button>
@@ -220,18 +220,18 @@ function DeleteControl({ action, field, id, label, warning }: { action: Action; 
   return (
     <form action={formAction} className="mt-2 flex flex-wrap items-center gap-2 text-sm">
       <input type="hidden" name={field} value={id} />
-      {warning && <p className="text-cap-red-deep">{warning}</p>}
+      {warning && <p className="text-danger">{warning}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="cursor-pointer rounded-full bg-cap-red-deep px-3 py-1 font-semibold text-white hover:bg-cap-red-deep/90 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cap-red-deep"
+        className="cursor-pointer rounded-full bg-danger px-3 py-1 font-semibold text-white hover:bg-danger/90 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger"
       >
         Confirm delete
       </button>
       <button
         type="button"
         onClick={() => setConfirming(false)}
-        className="cursor-pointer rounded-full border-2 border-ink bg-white px-3 py-1 font-semibold text-ink hover:bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cap-blue"
+        className="cursor-pointer rounded-full border-2 border-ink bg-surface px-3 py-1 font-semibold text-ink hover:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         Cancel
       </button>

@@ -9,12 +9,12 @@ type TicketFormProps = {
 };
 
 const inputClass =
-  "mt-1 block w-full rounded-xl border-2 border-ink/20 bg-white px-3 py-2 text-ink focus:border-cap-blue focus:outline-none focus:ring-4 focus:ring-cap-blue/20 aria-invalid:border-cap-red-deep";
+  "mt-1 block w-full rounded-xl border-2 border-ink/20 bg-surface px-3 py-2 text-ink focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/20 aria-invalid:border-danger";
 
 function FieldError({ id, messages }: { id: string; messages?: string[] }) {
   if (!messages?.length) return null;
   return (
-    <p id={id} className="mt-1 text-sm text-cap-red-deep">
+    <p id={id} className="mt-1 text-sm text-danger">
       {messages.join(" ")}
     </p>
   );
@@ -138,7 +138,7 @@ export function TicketForm({ action }: TicketFormProps) {
       </div>
 
       {!pending && state?.formError ? (
-        <p role="alert" className="text-sm text-red-700">
+        <p role="alert" className="text-sm text-danger">
           {state.formError}
         </p>
       ) : null}
@@ -146,7 +146,7 @@ export function TicketForm({ action }: TicketFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="sticker rounded-full bg-cap-green px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cap-blue disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
+        className="card rounded-full bg-action px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
       >
         {pending ? "Registering…" : "Register ticket"}
       </button>

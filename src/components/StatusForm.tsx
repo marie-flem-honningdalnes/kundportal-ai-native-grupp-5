@@ -20,7 +20,7 @@ export function StatusForm({ ticketId, status, action }: StatusFormProps) {
     <form key={status} action={formAction} className="flex flex-wrap items-start gap-3">
       <input type="hidden" name="ticketId" value={ticketId} />
       <div>
-        <label htmlFor="status" className="block text-sm font-medium text-slate-800">
+        <label htmlFor="status" className="block text-sm font-semibold text-ink">
           Status
         </label>
         <select
@@ -29,7 +29,7 @@ export function StatusForm({ ticketId, status, action }: StatusFormProps) {
           defaultValue={status}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? "status-error" : undefined}
-          className="mt-1 block rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/30 aria-invalid:border-red-600"
+          className="mt-1 block rounded-xl border-2 border-ink/20 bg-surface px-3 py-2 text-ink focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/20 aria-invalid:border-danger"
         >
           {ticketStatuses.map((s) => (
             <option key={s} value={s}>
@@ -38,7 +38,7 @@ export function StatusForm({ ticketId, status, action }: StatusFormProps) {
           ))}
         </select>
         {error && (
-          <p id="status-error" className="mt-1 text-sm text-red-700">
+          <p id="status-error" className="mt-1 text-sm text-danger">
             {error}
           </p>
         )}
@@ -46,7 +46,7 @@ export function StatusForm({ ticketId, status, action }: StatusFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="mt-6 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 disabled:opacity-60"
+        className="card mt-6 cursor-pointer rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:opacity-60"
       >
         Save
       </button>
